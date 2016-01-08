@@ -1,0 +1,91 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "2ea1180815bdbdd5b30992119a8fe7b3",
+    "packages": [
+        {
+            "name": "sergeyklay/simple-excel-php",
+            "version": "v0.3.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sergeyklay/simple-excel-php.git",
+                "reference": "ad24e3aac4cc30ccf175ad6f1a35fdd6b652e727"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/sergeyklay/simple-excel-php/ad24e3aac4cc30ccf175ad6f1a35fdd6b652e727.zip",
+                "reference": "ad24e3aac4cc30ccf175ad6f1a35fdd6b652e727",
+                "shasum": ""
+            },
+            "require": {
+                "ext-fileinfo": "*",
+                "ext-gd": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "ext-xml": "*",
+                "ext-zip": "*",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "codeception/codeception": "*",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SimpleExcel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Faisal Salman",
+                    "email": "fyzlman@gmail.com",
+                    "homepage": "http://faisalman.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Serghei Iakovlev",
+                    "email": "me@klay.me",
+                    "homepage": "http://klay.me",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Easily parse, convert and write between Microsoft Excel formats.",
+            "homepage": "http://sergeyklay.github.io/simple-excel-php",
+            "keywords": [
+                "converter",
+                "csv",
+                "document",
+                "excel",
+                "html",
+                "json",
+                "parser",
+                "spreadsheet",
+                "tsv",
+                "writer",
+                "xml"
+            ],
+            "time": "2015-11-22 00:25:22"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

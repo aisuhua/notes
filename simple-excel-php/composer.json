@@ -1,0 +1,9 @@
+{
+  "require": {
+    "sergeyklay/simple-excel-php": "^0.3"
+  },
+  "repositories": [
+    {"type": "composer", "url": "http://packagist.phpcomposer.com"},
+    {"packagist": false}
+  ]
+}

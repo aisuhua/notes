@@ -8,3 +8,4 @@ config.js
 .git
 phpcbf.phar
 phpcs.phar
+vendor
