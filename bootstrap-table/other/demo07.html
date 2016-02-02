@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap Table</title>
+
+    <link href="../assets/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/bootstrap-table.css">
+    <style>.panel-body{min-height:550px;}</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="page-header">
+                <h1>Bootstrap Table</h1>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">基本使用演示</h3>
+                </div>
+                <div class="panel-body">
+
+                <!-- 实验区域 -->
+
+                    <div id="toolbar">
+                        <button id="remove" class="btn btn-danger" disabled>
+                            <i class="glyphicon glyphicon-remove"></i> 删除
+                        </button>
+                        <button id="button" class="btn btn-default">
+                            button
+                        </button>
+                    </div>
+
+                    <table id="table"
+                           data-toggle="table"
+                           data-search="true"
+                           data-show-columns="true"
+                           data-show-refresh="true"
+                           data-show-toggle="true"
+                           data-show-pagination-switch="true"
+                           data-minimum-count-columns="2"
+                           data-unique-id="id"
+                           data-pagination="true"
+                           data-page-list="[5, 10, 25, 50, 100]"
+                           data-page-size="5"
+                           data-toolbar="#toolbar"
+                           data-side-pagination="server"
+                           data-url="data/data-server.json"
+                           data-response-handler="responseHandler"
+                           data-cache="false"
+                           data-show-footer="false"
+                           data-detail-view="true"
+                           data-detail-formatter="detailFormatter"
+                           data-show-export="true"
+                           data-click-to-select="true"
+                           data-export-types="['csv', 'excel', 'pdf']"
+                           data-export-options='{
+                             "fileName": "testo",
+                             "worksheetName": "test1",
+                             "jspdf": {
+                               "autotable": {
+                                 "styles": { "rowHeight": 20, "fontSize": 10 },
+                                 "headerStyles": { "fillColor": 255, "textColor": 0 },
+                                 "alternateRowStyles": { "fillColor": [60, 69, 79], "textColor": 255 }
+                               }
+                             }
+                           }'>
+                    </table>
+
+                    <!-- 导出 PDF 中文乱码问题还没有解决 -->
+
+                    <!-- /.实验区域 -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="../assets/js/jquery.js"></script>
+<script src="../assets/js/bootstrap.js"></script>
+<script src="../assets/js/bootstrap-table.js"></script>
+<script src="../assets/js/bootstrap-table-export.js"></script>
+<script src="../assets/js/bootstrap-table-zh-CN.js"></script>
+
+<script src="../assets/js/plugins/tableExport/FileSaver.min.js"></script>
+<script src="../assets/js/plugins/tableExport/jspdf.min.js"></script>
+<script src="../assets/js/plugins/tableExport/jspdf.plugin.autotable.js"></script>
+<script src="../assets/js/plugins/tableExport/tableExport.js"></script>
+
+<script>
+
+    var $table = $('#table');
+    var $remove = $('#remove');
+    var $button = $('#button');
+    var selections = [];
+
+    function initTable() {
+
+        $table.bootstrapTable({
+            columns: [
+                {
+                    field: 'state',
+                    checkbox: true,
+                },
+                {
+                    field: 'id',
+                    title: '编号',
+                    sortable: true,
+                    titleTooltip: '这表示商品的编号',
+                    align: 'center',
+                    halign: 'center',
+                    visible: true, //该列是否可见
+                    footerFormatter: totalTextFormatter
+                },
+                {
+                    field: 'name',
+                    title: '商品名称',
+                    sortable: true,
+                    footerFormatter: totalNameFormatter
+                },
+                {
+                    field: 'price',
+                    title: '价格',
+                    sortable: true,
+                    footerFormatter: totalPriceFormatter
+                },
+                {
+                    field: 'operate',
+                    title: '操作',
+                    formatter: operateFormatter,
+                    events: operateEvents
+                }
+            ]
+
+        });
+    }
+
+    //当行的选中状态发生变化时，需要同时改变按钮的状态
+    $table.on('check.bs.table uncheck.bs.table '+
+            'check-all.bs.table uncheck-all.bs.table', function() {
+
+        $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+
+        // save your data, here just save the current page
+        selections = getIdSelections();
+        // push or splice the selections if you want to save all data selections
+    });
+
+    $remove.click(function() {
+        var ids = getIdSelections();
+
+        $table.bootstrapTable('remove', {
+            field: 'id',
+            values: ids
+        });
+
+        //删除后，禁用按钮
+        $remove.prop('disabled', true);
+    });
+
+    //获取所有选中的行的 id
+    function getIdSelections() {
+        return $.map($table.bootstrapTable('getSelections'), function(row) {
+            return row.id;
+        });
+    }
+
+    //方法的使用
+    $button.click(function(){
+
+        //获取所有数据或者当前页数据
+        var data = $table.bootstrapTable('getData', 'useCurrentPage');
+
+        console.log(data);
+
+        //根据 uniqueId 获取一行数据
+        var data = $table.bootstrapTable('getRowByUniqueId', 2);
+
+        console.log(data);
+
+        //清空所有数据
+        //var data = $table.bootstrapTable('removeAll');
+
+        //选中第二行，行数从0开始
+        $table.bootstrapTable('check', 1);
+
+        //根据列的值选中多行
+        $table.bootstrapTable('checkBy', {
+            field: 'id',
+            values: [3,4]
+        });
+
+        //隐藏一些列
+        $table.bootstrapTable('hideColumn', 'operate');
+
+    });
+
+
+    //格式化详情信息
+    function detailFormatter(index, row) {
+        var html = [];
+
+        $.each(row, function(key, value) {
+            html.push('<p><strong>'+key+': </strong>'+value+'</p>');
+        });
+
+        return html.join('');
+    }
+
+    //当展开一列的时候，使用异步加载内容
+    $table.on('expand-row.bs.table', function (e, index, row, $detail) {
+
+        if (index % 2 == 1) {
+
+            $detail.html('正在通过 Ajax 加载数据，请稍后...');
+
+            $.get('../README.md', function (res) {
+                $detail.html(res.replace(/\n/g, '<br>'));
+            });
+        }
+    });
+
+    function totalTextFormatter() {
+        return 'Total';
+    }
+
+    function totalNameFormatter(data) {
+        return data.length;
+    }
+
+    function totalPriceFormatter(data) {
+        //console.log(data);
+
+        var total = 0;
+        $.each(data, function(index, row) {
+            total += +(row.price);
+        });
+
+        return total;
+    }
+
+    function operateFormatter(value, row, index) {
+        /*console.log(value);
+         console.log(row);
+         console.log(index);*/
+
+        return [
+            '<a class="btn btn-default btn-xs delete" title="删除">',
+            '<span class="glyphicon glyphicon-trash"></span>',
+            '</a> ',
+            '<a class="btn btn-default btn-xs edit" title="编辑">',
+            '<span class="glyphicon glyphicon-edit"></span>',
+            '</a> ',
+            '<a class="btn btn-default btn-xs detail" title="查看">',
+            '<span class="glyphicon glyphicon-eye-open"></span>',
+            '</a>'
+        ].join('');
+    }
+
+    //返回数据以后的预处理
+    function responseHandler(res) {
+
+        $.each(res.rows, function(i, row) {
+            row.state = $.inArray(row.id, selections) !== -1;
+        });
+
+        return res;
+    }
+
+    window.operateEvents = {
+        'click .delete': function(event, value, row, index) {
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: [row.id]
+            });
+
+            /*$table.bootstrapTable('refresh', {
+                silent: true
+            });*/
+        },
+        'click .edit': function(event, value, row, index) {
+            alert('You want to edit id: '+row.id);
+        },
+        'click .detail': function(event, value, row, index) {
+            alert('You click detail action, row: ' + JSON.stringify(row));
+        }
+    };
+
+    initTable();
+
+</script>
+
+<!-- http://jsfiddle.net/marcelk/6gd9w79u/ -->
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap Table</title>
+
+    <link href="../assets/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/bootstrap-table.css">
+    <style>.panel-body{min-height:550px;}</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="page-header">
+                <h1>Bootstrap Table</h1>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">基本使用演示</h3>
+                </div>
+                <div class="panel-body">
+
+                <!-- 实验区域 -->
+
+                    <div id="toolbar">
+                        <button id="remove" class="btn btn-danger" disabled>
+                            <i class="glyphicon glyphicon-remove"></i> 删除
+                        </button>
+                    </div>
+
+                    <table id="table"
+                           data-toggle="table"
+                           data-search="true"
+                           data-show-columns="true"
+                           data-show-refresh="true"
+                           data-show-toggle="true"
+                           data-show-pagination-switch="true"
+                           data-minimum-count-columns="2"
+                           data-id-field="id"
+                           data-pagination="true"
+                           data-page-list="[5, 10, 25, 50, 100]"
+                           data-page-size="5"
+                           data-toolbar="#toolbar"
+                           data-side-pagination="server"
+                           data-url="data/data-server.json"
+                           data-cache="false"
+                           data-show-footer="true">
+                    </table>
+
+                    <!-- /.实验区域 -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="../assets/js/jquery.js"></script>
+<script src="../assets/js/bootstrap.js"></script>
+<script src="../assets/js/bootstrap-table.js"></script>
+<script src="../assets/js/bootstrap-table-zh-CN.js"></script>
+<script>
+
+    var $table = $('#table');
+
+    function initTable() {
+
+        $table.bootstrapTable({
+            columns: [
+                {
+                    field: 'state',
+                    checkbox: true,
+                },
+                {
+                    field: 'id',
+                    title: '编号',
+                    sortable: true,
+                    titleTooltip: '这表示商品的编号',
+                    align: 'center',
+                    halign: 'center',
+                    width: '50%',
+                    visible: true, //该列是否可见
+                    footerFormatter: totalTextFormatter
+                },
+                {
+                    field: 'name',
+                    title: '商品名称',
+                    footerFormatter: totalNameFormatter
+                },
+                {
+                    field: 'price',
+                    title: '价格',
+                    footerFormatter: totalPriceFormatter
+                },
+                {
+                    field: 'operate',
+                    title: '操作',
+                    formatter: operateFormatter,
+                    events: operateEvents
+                }
+            ]
+        });
+
+    }
+
+
+    function totalTextFormatter() {
+        return 'Total';
+    }
+
+    function totalNameFormatter(data) {
+        return data.length;
+    }
+
+    function totalPriceFormatter(data) {
+        //console.log(data);
+
+        var total = 0;
+        $.each(data, function(index, row) {
+            total += +(row.price);
+        });
+
+        return total;
+    }
+
+    function operateFormatter(value, row, index) {
+        /*console.log(value);
+         console.log(row);
+         console.log(index);*/
+
+        return [
+            '<a class="btn btn-default btn-xs delete" title="删除">',
+            '<span class="glyphicon glyphicon-trash"></span>',
+            '</a> ',
+            '<a class="btn btn-default btn-xs edit" title="编辑">',
+            '<span class="glyphicon glyphicon-edit"></span>',
+            '</a> ',
+            '<a class="btn btn-default btn-xs detail" title="查看">',
+            '<span class="glyphicon glyphicon-eye-open"></span>',
+            '</a>'
+        ].join('');
+    }
+
+    window.operateEvents = {
+        'click .delete': function(event, value, row, index) {
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: [row.id]
+            });
+        },
+        'click .edit': function(event, value, row, index) {
+            alert('You want to edit id: '+row.id);
+        },
+        'click .detail': function(event, value, row, index) {
+            alert('You click detail action, row: ' + JSON.stringify(row));
+        }
+    };
+
+
+
+    initTable();
+
+</script>
+
+</body>
+</html>

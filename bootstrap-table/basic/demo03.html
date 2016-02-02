@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap Table</title>
+
+    <link href="../assets/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/bootstrap-table.css">
+    <style>.panel-body{min-height:550px;}</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="page-header">
+                <h1>Bootstrap Table</h1>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">基本使用演示</h3>
+                </div>
+                <div class="panel-body">
+
+                <!-- 实验区域 -->
+
+                    <table id="table"></table>
+
+                <!-- /.实验区域 -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="../assets/js/jquery.js"></script>
+<script src="../assets/js/bootstrap.js"></script>
+<script src="../assets/js/bootstrap-table.js"></script>
+<script src="../assets/js/bootstrap-table-zh-CN.js"></script>
+
+<script>
+$(function() {
+
+    $('#table').bootstrapTable({
+        columns: [
+            {
+                field: 'id',
+                title: '编号'
+            },
+            {
+                field: 'name',
+                title: '商品名称'
+            },
+            {
+                field: 'price',
+                title: '价格'
+            }
+        ],
+        data: [
+            {
+                id: 1,
+                name: '西数移动硬盘',
+                price: 2000
+            },
+            {
+                id: 2,
+                name: '金士顿内存条8G',
+                price: 3000
+            },
+            {
+                id: 3,
+                name: '迪士尼维尼小熊',
+                price: 4000
+            }
+        ]
+    });
+
+});
+</script>
+
+
+
+
+
+
+
+</body>
+</html>
